@@ -59,9 +59,68 @@ export interface WorkoutSession {
   exercises: ExercisePerformance[];
 }
 
+export interface AiCoachSummaryNote {
+  generatedAt: string;
+  lastSource?: "cache" | "fresh";
+  title: string;
+  summary: string;
+  actionItems: string[];
+}
+
+export interface AiTrainingOutlookNote {
+  generatedAt: string;
+  lastSource?: "cache" | "fresh";
+  title: string;
+  momentum: string;
+  keep: string[];
+  change: string[];
+  watch: string[];
+}
+
+export interface AiExerciseExplanation {
+  exerciseName: string;
+  explanation: string;
+}
+
+export interface AiNextWorkoutNote {
+  generatedAt: string;
+  dayId: string;
+  lastSource?: "cache" | "fresh";
+  title: string;
+  overview: string;
+  exerciseNotes: AiExerciseExplanation[];
+  coachingCue: string;
+}
+
+export interface AiSessionRecapNote {
+  generatedAt: string;
+  sessionId: string;
+  lastSource?: "cache" | "fresh";
+  title: string;
+  wins: string[];
+  watchNext: string[];
+  encouragement: string;
+}
+
+export interface AiNoteStore {
+  coachSummary?: AiCoachSummaryNote;
+  trainingOutlook?: AiTrainingOutlookNote;
+  nextWorkoutExplanations?: Record<string, AiNextWorkoutNote>;
+  sessionRecaps?: Record<string, AiSessionRecapNote>;
+}
+
+export interface SavedProgramTemplate {
+  id: string;
+  name: string;
+  savedAt: string;
+  program: TrainingProgram;
+}
+
 export interface TrainingState {
   program: TrainingProgram;
   history: WorkoutSession[];
+  ai?: AiNoteStore;
+  savedPrograms?: SavedProgramTemplate[];
 }
 
 export interface ProgressionTarget {

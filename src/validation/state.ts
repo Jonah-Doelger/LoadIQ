@@ -10,16 +10,38 @@ import {
 export function validateTrainingState(state: TrainingState): ValidationResult {
   const issues: ValidationIssue[] = [];
 
-  if (!state.program || !state.program.id || state.program.days.length === 0) {
+  const { dayIds, exerciseIds } = validateProgram(state.program, "program", issues);
+
+  const sessionIds = new Set<string>();
+
+  for (const [sessionIndex, session] of state.history.entries()) {
+    validateSession(session, sessionIndex, dayIds, exerciseIds, sessionIds, issues);
+  }
+
+  validateAiState(state, dayIds, sessionIds, issues);
+  validateSavedPrograms(state, issues);
+
+  return {
+    isValid: issues.length === 0,
+    issues
+  };
+}
+
+function validateProgram(
+  program: TrainingState["program"],
+  pathPrefix: string,
+  issues: ValidationIssue[]
+): { dayIds: Set<string>; exerciseIds: Set<string> } {
+  if (!program || !program.id || program.days.length === 0) {
     issues.push({
-      path: "program",
+      path: pathPrefix,
       message: "Program must exist and include at least one training day."
     });
   }
 
-  if (!Number.isInteger(state.program.sessionsPerWeek) || state.program.sessionsPerWeek <= 0) {
+  if (!Number.isInteger(program.sessionsPerWeek) || program.sessionsPerWeek <= 0) {
     issues.push({
-      path: "program.sessionsPerWeek",
+      path: `${pathPrefix}.sessionsPerWeek`,
       message: "Program sessionsPerWeek must be a positive integer."
     });
   }
@@ -27,17 +49,17 @@ export function validateTrainingState(state: TrainingState): ValidationResult {
   const dayIds = new Set<string>();
   const exerciseIds = new Set<string>();
 
-  for (const [dayIndex, day] of state.program.days.entries()) {
+  for (const [dayIndex, day] of program.days.entries()) {
     if (!day.id) {
       issues.push({
-        path: `program.days[${dayIndex}].id`,
+        path: `${pathPrefix}.days[${dayIndex}].id`,
         message: "Workout day id is required."
       });
     }
 
     if (dayIds.has(day.id)) {
       issues.push({
-        path: `program.days[${dayIndex}].id`,
+        path: `${pathPrefix}.days[${dayIndex}].id`,
         message: `Duplicate workout day id "${day.id}".`
       });
     }
@@ -47,7 +69,7 @@ export function validateTrainingState(state: TrainingState): ValidationResult {
     for (const [exerciseIndex, exercise] of day.exercises.entries()) {
       if (exerciseIds.has(exercise.id)) {
         issues.push({
-          path: `program.days[${dayIndex}].exercises[${exerciseIndex}].id`,
+          path: `${pathPrefix}.days[${dayIndex}].exercises[${exerciseIndex}].id`,
           message: `Duplicate exercise id "${exercise.id}".`
         });
       }
@@ -56,30 +78,92 @@ export function validateTrainingState(state: TrainingState): ValidationResult {
 
       if (exercise.targetSets <= 0) {
         issues.push({
-          path: `program.days[${dayIndex}].exercises[${exerciseIndex}].targetSets`,
+          path: `${pathPrefix}.days[${dayIndex}].exercises[${exerciseIndex}].targetSets`,
           message: "Exercise targetSets must be greater than 0."
         });
       }
 
       if (exercise.repRange.min <= 0 || exercise.repRange.max < exercise.repRange.min) {
         issues.push({
-          path: `program.days[${dayIndex}].exercises[${exerciseIndex}].repRange`,
+          path: `${pathPrefix}.days[${dayIndex}].exercises[${exerciseIndex}].repRange`,
           message: "Exercise rep range must be positive and ordered min <= max."
         });
       }
     }
   }
 
-  const sessionIds = new Set<string>();
+  return { dayIds, exerciseIds };
+}
 
-  for (const [sessionIndex, session] of state.history.entries()) {
-    validateSession(session, sessionIndex, dayIds, exerciseIds, sessionIds, issues);
+function validateSavedPrograms(state: TrainingState, issues: ValidationIssue[]): void {
+  const savedIds = new Set<string>();
+
+  for (const [index, template] of (state.savedPrograms ?? []).entries()) {
+    if (savedIds.has(template.id)) {
+      issues.push({
+        path: `savedPrograms[${index}].id`,
+        message: `Duplicate saved program id "${template.id}".`
+      });
+    }
+
+    savedIds.add(template.id);
+
+    if (Number.isNaN(new Date(template.savedAt).getTime())) {
+      issues.push({
+        path: `savedPrograms[${index}].savedAt`,
+        message: "Saved program savedAt must be a valid date."
+      });
+    }
+
+    validateProgram(template.program, `savedPrograms[${index}].program`, issues);
+  }
+}
+
+function validateAiState(
+  state: TrainingState,
+  dayIds: Set<string>,
+  sessionIds: Set<string>,
+  issues: ValidationIssue[]
+): void {
+  if (!state.ai) {
+    return;
   }
 
-  return {
-    isValid: issues.length === 0,
-    issues
-  };
+  if (state.ai.nextWorkoutExplanations) {
+    for (const [dayId, note] of Object.entries(state.ai.nextWorkoutExplanations)) {
+      if (!dayIds.has(dayId)) {
+        issues.push({
+          path: `ai.nextWorkoutExplanations.${dayId}`,
+          message: `Unknown workout day "${dayId}" in AI cache.`
+        });
+      }
+
+      if (note.dayId !== dayId) {
+        issues.push({
+          path: `ai.nextWorkoutExplanations.${dayId}.dayId`,
+          message: "Cached next-workout explanation dayId must match its key."
+        });
+      }
+    }
+  }
+
+  if (state.ai.sessionRecaps) {
+    for (const [sessionId, note] of Object.entries(state.ai.sessionRecaps)) {
+      if (!sessionIds.has(sessionId)) {
+        issues.push({
+          path: `ai.sessionRecaps.${sessionId}`,
+          message: `Unknown workout session "${sessionId}" in AI cache.`
+        });
+      }
+
+      if (note.sessionId !== sessionId) {
+        issues.push({
+          path: `ai.sessionRecaps.${sessionId}.sessionId`,
+          message: "Cached session recap sessionId must match its key."
+        });
+      }
+    }
+  }
 }
 
 function validateSession(

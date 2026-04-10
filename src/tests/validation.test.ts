@@ -53,4 +53,56 @@ export function runValidationTests(): void {
     assert.equal(result.isValid, false);
     assert.equal(result.issues.some((issue) => issue.path === "program.sessionsPerWeek"), true);
   }
+
+  {
+    const state = createTrainingState(createStarterProgram(), []);
+    state.ai = {
+      nextWorkoutExplanations: {
+        "made-up-day": {
+          generatedAt: "2026-04-09T12:00:00.000Z",
+          dayId: "made-up-day",
+          title: "Bad cache",
+          overview: "Bad cache",
+          exerciseNotes: [],
+          coachingCue: "Cue"
+        }
+      }
+    };
+    const result = validateTrainingState(state);
+
+    assert.equal(result.isValid, false);
+    assert.equal(result.issues.some((issue) => issue.path === "ai.nextWorkoutExplanations.made-up-day"), true);
+  }
+
+  {
+    const state = createTrainingState(createStarterProgram(), [
+      {
+        id: "session-1",
+        dayId: "upper-a",
+        performedAt: "2026-04-09T18:00:00-05:00",
+        exercises: [
+          {
+            exerciseId: "bench-press",
+            sets: [{ reps: 5, load: 135, completed: true }]
+          }
+        ]
+      }
+    ]);
+    state.ai = {
+      sessionRecaps: {
+        "session-2": {
+          generatedAt: "2026-04-09T12:00:00.000Z",
+          sessionId: "session-2",
+          title: "Bad recap",
+          wins: ["Win"],
+          watchNext: ["Watch"],
+          encouragement: "Keep going"
+        }
+      }
+    };
+    const result = validateTrainingState(state);
+
+    assert.equal(result.isValid, false);
+    assert.equal(result.issues.some((issue) => issue.path === "ai.sessionRecaps.session-2"), true);
+  }
 }

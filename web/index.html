@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LoadIQ</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">LoadIQ</p>
+        <h1>Smarter Progression. Every Session.</h1>
+        <p class="lede">
+          The deterministic core now has a browser home: next workouts, adherence, trends, records,
+          volume, and fast session logging.
+        </p>
+      </section>
+
+      <section id="app-banner" class="banner hidden"></section>
+
+      <section class="summary-strip">
+        <article class="summary-card">
+          <span class="summary-label">Program</span>
+          <strong id="summary-program-name">-</strong>
+          <span id="summary-program-meta" class="muted">-</span>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">Next Focus</span>
+          <strong id="summary-next-focus">-</strong>
+          <span id="summary-next-meta" class="muted">-</span>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">Recent Adherence</span>
+          <strong id="summary-adherence-rate">-</strong>
+          <span id="summary-adherence-meta" class="muted">-</span>
+        </article>
+      </section>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="program">Program Studio</button>
+        <button class="tab" data-tab="logging">Workout Log</button>
+        <button class="tab" data-tab="history">History</button>
+      </nav>
+
+      <section class="tab-panel active" data-panel="overview">
+      <section class="grid">
+        <article class="panel accent">
+          <h2>Program</h2>
+          <p class="section-copy">Your current plan at a glance, including split structure and weekly frequency.</p>
+          <div id="program-summary"></div>
+        </article>
+        <article class="panel">
+          <h2>Adherence</h2>
+          <p class="section-copy">How consistently the recent training history matches your intended weekly schedule.</p>
+          <div id="adherence-summary"></div>
+        </article>
+      </section>
+      <section class="panel">
+        <h2>AI Usage</h2>
+        <p class="section-copy">A simple session-level view of when the app generated a fresh AI result versus reused a cached note.</p>
+        <div id="ai-usage-summary"></div>
+      </section>
+      <section class="grid">
+        <article class="panel">
+          <h2>Coach Summary</h2>
+          <p class="section-copy">AI can turn the current deterministic signals into a short training summary.</p>
+          <div id="coach-summary" class="ai-card">
+            <p class="muted">Generate a summary when you want a quick read on momentum, focus, and consistency.</p>
+          </div>
+          <div class="row-actions">
+            <button id="coach-summary-button" class="primary" type="button">Generate Summary</button>
+          </div>
+        </article>
+        <article class="panel">
+          <h2>Training Outlook</h2>
+          <p class="section-copy">A broader AI read on momentum, consistency, and what to watch next.</p>
+          <div id="training-outlook" class="ai-card">
+            <p class="muted">Generate an outlook when you want a week-level coaching read instead of a single-session note.</p>
+          </div>
+          <div class="row-actions">
+            <button id="training-outlook-button" class="primary" type="button">Generate Outlook</button>
+          </div>
+        </article>
+      </section>
+      <section class="grid">
+        <article class="panel">
+          <h2>Next Workout Explanation</h2>
+          <p class="section-copy">Get a short coaching explanation for the currently selected workout day.</p>
+          <div id="next-workout-ai" class="ai-card">
+            <p class="muted">Choose a day in Workout Log, then generate a coaching explanation here.</p>
+          </div>
+          <div class="row-actions">
+            <button id="next-workout-ai-button" class="primary" type="button">Explain Next Workout</button>
+          </div>
+        </article>
+      </section>
+      </section>
+
+      <section class="tab-panel" data-panel="program">
+      <nav class="subtabs">
+        <button class="subtab active" data-subtab="program-create-import">Create / Import</button>
+        <button class="subtab" data-subtab="program-ai">AI Generate</button>
+        <button class="subtab" data-subtab="program-library">Library</button>
+        <button class="subtab" data-subtab="program-edit">Edit Existing</button>
+      </nav>
+
+      <section class="subtab-panel active" data-subpanel="program-create-import">
+      <section class="grid wide">
+        <article class="panel">
+          <h2>Create Your Own Plan</h2>
+          <p class="section-copy">Build a program manually by defining the main structure first, then add days and exercises below.</p>
+          <div class="studio-grid">
+            <form id="program-form" class="log-form">
+              <label>
+                Program Name
+                <input id="program-name" type="text" />
+              </label>
+              <label>
+                Split
+                <input id="program-split" type="text" />
+              </label>
+              <label>
+                Sessions Per Week
+                <input id="program-frequency" type="number" min="1" />
+              </label>
+              <button type="submit" class="primary">Update Program</button>
+            </form>
+
+            <form id="day-form" class="log-form">
+              <label>
+                Day Id
+                <input id="day-id" type="text" placeholder="upper-b" />
+              </label>
+              <label>
+                Day Name
+                <input id="day-name" type="text" placeholder="Upper B" />
+              </label>
+              <button type="submit" class="primary">Add Day</button>
+            </form>
+
+            <form id="exercise-form" class="log-form">
+              <label>
+                Day
+                <select id="exercise-day"></select>
+              </label>
+              <label>
+                Exercise Id
+                <input id="exercise-id" type="text" placeholder="incline-dumbbell-press" />
+              </label>
+              <label>
+                Exercise Name
+                <input id="exercise-name" type="text" placeholder="Incline Dumbbell Press" />
+              </label>
+              <label>
+                Muscle Groups
+                <input id="exercise-groups" type="text" placeholder="chest,shoulders,triceps" />
+              </label>
+              <div class="set-grid compact">
+                <label>Sets <input id="exercise-sets" type="number" min="1" value="3" /></label>
+                <label>Rep Min <input id="exercise-rep-min" type="number" min="1" value="8" /></label>
+                <label>Rep Max <input id="exercise-rep-max" type="number" min="1" value="12" /></label>
+              </div>
+              <label>
+                Load Increment
+                <input id="exercise-increment" type="number" min="0.5" step="0.5" value="5" />
+              </label>
+              <button type="submit" class="primary">Add Exercise</button>
+            </form>
+          </div>
+          <p id="studio-status" class="status"></p>
+        </article>
+
+        <article class="panel">
+          <h2>Import Program</h2>
+          <p class="section-copy">Import from pasted text or upload a file. Text and CSV are handled directly today, while PDF and Excel are staged with clear fallback messaging.</p>
+          <form id="import-form" class="log-form">
+            <label>
+              Upload A File
+              <input id="import-file" type="file" accept=".txt,.csv,.json,.pdf,.xls,.xlsx" />
+            </label>
+            <div id="import-file-status" class="muted"></div>
+            <label>
+              Structured Program Text
+              <textarea id="import-text" rows="16"></textarea>
+            </label>
+            <label class="check">
+              <input id="import-reset-history" type="checkbox" />
+              Reset history while importing
+            </label>
+            <button type="submit" class="primary">Import Program</button>
+          </form>
+          <p id="import-status" class="status"></p>
+        </article>
+      </section>
+      </section>
+
+      <section class="subtab-panel" data-subpanel="program-ai">
+      <section class="grid wide">
+        <article class="panel">
+          <h2>Generate A Program With AI</h2>
+          <p class="section-copy">Describe the goal, experience level, and available equipment, then let AI draft a deterministic program you can review before saving.</p>
+          <form id="ai-program-form" class="log-form">
+            <label>
+              Primary Goal
+              <input id="ai-goal" type="text" placeholder="Build muscle and basic strength" />
+            </label>
+            <label>
+              Experience Level
+              <select id="ai-experience">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </label>
+            <label>
+              Sessions Per Week
+              <input id="ai-sessions-per-week" type="number" min="1" max="7" value="3" />
+            </label>
+            <label>
+              Equipment
+              <input id="ai-equipment" type="text" placeholder="Full gym, bench, barbells, dumbbells" />
+            </label>
+            <label>
+              Notes
+              <textarea id="ai-notes" rows="5" placeholder="Optional preferences, time constraints, or exercise limitations"></textarea>
+            </label>
+            <button type="submit" class="primary">Generate AI Program</button>
+          </form>
+          <p id="ai-program-status" class="status"></p>
+        </article>
+
+        <article class="panel">
+          <h2>AI Program Draft</h2>
+          <p class="section-copy">Review the generated split, key principles, and exercises before replacing the active plan.</p>
+          <div id="ai-program-preview" class="ai-card">
+            <p class="muted">Generate a plan to preview it here.</p>
+          </div>
+          <label class="check">
+            <input id="ai-apply-reset-history" type="checkbox" checked />
+            Reset history when applying the generated plan
+          </label>
+          <div class="row-actions">
+            <button id="apply-ai-program-button" class="primary" type="button" disabled>Apply Generated Program</button>
+            <button id="clear-ai-cache-button" class="secondary" type="button">Clear AI Notes</button>
+          </div>
+        </article>
+      </section>
+      </section>
+
+      <section class="subtab-panel" data-subpanel="program-library">
+      <section class="panel">
+        <h2>Plan Library</h2>
+        <p class="section-copy">Save reusable plans, load one as the active plan, or remove older templates you no longer need.</p>
+        <div class="row-actions">
+          <button id="save-current-plan-button" class="primary" type="button">Save Current Plan</button>
+        </div>
+        <label class="check">
+          <input id="load-template-reset-history" type="checkbox" checked />
+          Reset history when loading a saved plan
+        </label>
+        <div id="saved-plan-list"></div>
+        <p id="saved-plan-status" class="status"></p>
+      </section>
+      </section>
+
+      <section class="subtab-panel" data-subpanel="program-edit">
+      <section class="panel">
+        <h2>Edit Existing Program</h2>
+        <p class="section-copy">Tune names, exercises, and structure without leaving the app.</p>
+        <div class="grid wide">
+          <form id="edit-day-form" class="panel subtle hidden">
+            <h3>Update Day</h3>
+            <input id="edit-day-id" type="hidden" />
+            <label>
+              Day Name
+              <input id="edit-day-name" type="text" />
+            </label>
+            <div class="row-actions">
+              <button type="submit" class="primary">Save Day</button>
+              <button type="button" class="secondary" id="cancel-day-edit">Cancel</button>
+            </div>
+          </form>
+
+          <form id="edit-exercise-form" class="panel subtle hidden">
+            <h3>Update Exercise</h3>
+            <input id="edit-exercise-day-id" type="hidden" />
+            <input id="edit-exercise-id" type="hidden" />
+            <label>
+              Exercise Name
+              <input id="edit-exercise-name" type="text" />
+            </label>
+            <label>
+              Muscle Groups
+              <input id="edit-exercise-groups" type="text" />
+            </label>
+            <div class="set-grid compact">
+              <label>Sets <input id="edit-exercise-sets" type="number" min="1" /></label>
+              <label>Rep Min <input id="edit-exercise-rep-min" type="number" min="1" /></label>
+              <label>Rep Max <input id="edit-exercise-rep-max" type="number" min="1" /></label>
+            </div>
+            <label>
+              Load Increment
+              <input id="edit-exercise-increment" type="number" min="0.5" step="0.5" />
+            </label>
+            <div class="row-actions">
+              <button type="submit" class="primary">Save Exercise</button>
+              <button type="button" class="secondary" id="cancel-exercise-edit">Cancel</button>
+            </div>
+          </form>
+        </div>
+        <div id="program-editor-list"></div>
+        <p id="editor-status" class="status"></p>
+      </section>
+      </section>
+      </section>
+
+      <section class="tab-panel" data-panel="logging">
+      <section class="grid wide">
+        <article class="panel">
+          <h2>Log Workout</h2>
+          <p class="section-copy">Capture the completed session and immediately feed the progression engine.</p>
+          <form id="log-form" class="log-form">
+            <label>
+              Workout Day
+              <select id="day-select"></select>
+            </label>
+            <label>
+              Performed At
+              <input id="performed-at" type="datetime-local" />
+            </label>
+            <div id="exercise-editor" class="exercise-editor"></div>
+            <button type="submit" class="primary">Save Session</button>
+            <p id="form-status" class="status"></p>
+          </form>
+        </article>
+
+        <article class="panel">
+          <h2>Next Workout</h2>
+          <p class="section-copy">Live target preview for the selected day based on saved history.</p>
+          <div id="next-workout"></div>
+        </article>
+      </section>
+      <section class="panel">
+        <h2>Session Recap</h2>
+        <p class="section-copy">After a workout is saved, AI can turn the raw set data into a short recap.</p>
+        <div id="session-recap" class="ai-card">
+          <p class="muted">Save a workout, then generate a recap for the latest session.</p>
+        </div>
+        <div class="row-actions">
+          <button id="session-recap-button" class="primary" type="button">Generate Latest Session Recap</button>
+        </div>
+      </section>
+      </section>
+
+      <section class="tab-panel" data-panel="history">
+      <section class="panel">
+        <h2>History Metrics</h2>
+        <p class="section-copy">Filter the recent training window first, then open the metric sections you want to inspect.</p>
+        <label>
+          Show Sessions
+          <select id="history-limit">
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="24">24</option>
+          </select>
+        </label>
+        <div id="history-summary" class="muted"></div>
+      </section>
+
+      <section class="grid triple">
+        <article class="panel">
+          <h2>Volume</h2>
+          <p class="section-copy">Choose a muscle group to see total sets, reps, and load in the selected session window.</p>
+          <label>
+            Muscle Group
+            <select id="volume-select"></select>
+          </label>
+          <div id="volume-list"></div>
+        </article>
+        <article class="panel">
+          <h2>Trends</h2>
+          <p class="section-copy">Choose a lift to inspect its direction and latest estimated 1RM.</p>
+          <label>
+            Exercise
+            <select id="trend-select"></select>
+          </label>
+          <div id="trend-list"></div>
+        </article>
+        <article class="panel">
+          <h2>Records</h2>
+          <p class="section-copy">Choose a saved record from the selected session window.</p>
+          <label>
+            Record
+            <select id="record-select"></select>
+          </label>
+          <div id="record-list"></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Recent Sessions</h2>
+        <p class="section-copy">Review, expand, and revise sessions from the selected window without the extra muscle-group grouping.</p>
+        <form id="edit-session-form" class="panel subtle hidden">
+          <h3>Edit Session</h3>
+          <input id="edit-session-id" type="hidden" />
+          <input id="edit-session-day-id" type="hidden" />
+          <label>
+            Performed At
+            <input id="edit-session-performed-at" type="datetime-local" />
+          </label>
+          <div id="edit-session-exercises" class="editor-stack"></div>
+          <div class="row-actions">
+            <button type="submit" class="primary">Save Session</button>
+            <button type="button" class="secondary" id="cancel-session-edit">Cancel</button>
+          </div>
+        </form>
+        <div id="history-list"></div>
+        <p id="history-status" class="status"></p>
+      </section>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

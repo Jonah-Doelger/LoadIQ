@@ -307,5 +307,26 @@
         }
       ]
     }
-  ]
+  ],
+  "ai": {
+    "sessionRecaps": {
+      "session-3": {
+        "generatedAt": "2026-04-10T04:10:49.446Z",
+        "sessionId": "session-3",
+        "title": "Post-workout recap — Lower A (2026-04-11)",
+        "wins": [
+          "Back Squat — 3/3 sets completed; best set: 5 reps @185",
+          "Romanian Deadlift — 3/3 sets completed; best set: 8 reps @155",
+          "Standing Calf Raise — 3/3 sets completed; best set: 12 reps @90"
+        ],
+        "watchNext": [
+          "Back Squat — best set: 5 reps @185",
+          "Romanian Deadlift — best set: 8 reps @155",
+          "Standing Calf Raise — best set: 12 reps @90"
+        ],
+        "encouragement": "All scheduled sets were completed. Logged best sets are listed above.",
+        "lastSource": "fresh"
+      }
+    }
+  }
 }

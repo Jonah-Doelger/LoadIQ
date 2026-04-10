@@ -123,6 +123,57 @@ CLI rules:
 - add `!` to a set if it was not completed
 - omit `--performed-at` to use the current timestamp
 
+## Running The Web App
+
+To start the browser app:
+
+```text
+npm run build
+npm run web
+```
+
+Then open:
+
+```text
+http://127.0.0.1:3000
+```
+
+The first web app supports:
+
+- viewing the current program
+- viewing next workouts
+- viewing adherence, volume, trends, records, and history
+- logging a workout from the browser
+- generating a new workout plan with AI in Program Studio
+- generating AI coaching summaries and next-workout explanations when `OPENAI_API_KEY` is set
+- generating AI training outlooks and post-workout recaps when `OPENAI_API_KEY` is set
+
+## Enabling AI In The Web App
+
+To turn on AI coaching in the web app, set an OpenAI API key before starting the server:
+
+```text
+$env:OPENAI_API_KEY="your-key-here"
+npm run web
+```
+
+You can optionally choose a model:
+
+```text
+$env:OPENAI_MODEL="gpt-5-mini"
+npm run web
+```
+
+If you do not set `OPENAI_MODEL`, the app now defaults to `gpt-5-mini` for faster and lower-cost responses.
+
+Current AI-powered web flows:
+
+- generate a new program from goal, experience, frequency, and equipment
+- generate and cache a coach summary
+- generate and cache a trends/adherence outlook with `keep / change / watch`
+- generate and cache next-workout explanations per day
+- generate and cache post-workout session recaps
+
 ## Viewing The Next Workout
 
 To inspect the next plan for a saved training day without logging anything new:

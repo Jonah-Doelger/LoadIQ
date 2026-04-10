@@ -7,6 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/examples/demo.js",
     "dev": "ts-node src/examples/demo.ts",
+    "web": "node dist/web/server.js",
     "test": "tsc -p tsconfig.json && node dist/tests/run.js",
     "log-workout": "node dist/cli/logWorkout.js",
     "show-next-workout": "node dist/cli/showNextWorkout.js",
