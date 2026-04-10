@@ -1,0 +1,13 @@
+Program: Starter Upper / Lower
+Split: Upper / Lower
+SessionsPerWeek: 4
+
+Day: upper-a | Upper A
+Exercise: bench-press | Bench Press | chest,shoulders,triceps | 3 | 5-8 | 5
+Exercise: barbell-row | Barbell Row | back,biceps | 3 | 6-10 | 5
+Exercise: overhead-press | Overhead Press | shoulders,triceps | 3 | 5-8 | 2.5
+
+Day: lower-a | Lower A
+Exercise: back-squat | Back Squat | quads,glutes,core | 3 | 5-8 | 5
+Exercise: romanian-deadlift | Romanian Deadlift | hamstrings,glutes,back | 3 | 6-10 | 5
+Exercise: calf-raise | Standing Calf Raise | calves | 3 | 10-15 | 5

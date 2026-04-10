@@ -1,0 +1,33 @@
+{
+  "name": "loadiq",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic MVP for the LoadIQ strength training engine.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/examples/demo.js",
+    "dev": "ts-node src/examples/demo.ts",
+    "test": "tsc -p tsconfig.json && node dist/tests/run.js",
+    "log-workout": "node dist/cli/logWorkout.js",
+    "show-next-workout": "node dist/cli/showNextWorkout.js",
+    "show-volume": "node dist/cli/showVolume.js",
+    "show-trends": "node dist/cli/showTrends.js",
+    "show-history": "node dist/cli/showHistory.js",
+    "show-records": "node dist/cli/showRecords.js",
+    "show-adherence": "node dist/cli/showAdherence.js",
+    "show-program": "node dist/cli/showProgram.js",
+    "update-program": "node dist/cli/updateProgram.js",
+    "add-program-day": "node dist/cli/addProgramDay.js",
+    "add-program-exercise": "node dist/cli/addProgramExercise.js",
+    "update-program-day": "node dist/cli/updateProgramDay.js",
+    "remove-program-day": "node dist/cli/removeProgramDay.js",
+    "update-program-exercise": "node dist/cli/updateProgramExercise.js",
+    "remove-program-exercise": "node dist/cli/removeProgramExercise.js",
+    "import-program": "node dist/cli/importProgram.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

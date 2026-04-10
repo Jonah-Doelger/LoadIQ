@@ -1,0 +1,311 @@
+{
+  "program": {
+    "id": "starter-upper-lower",
+    "name": "Starter Upper / Lower",
+    "split": "Upper / Lower",
+    "sessionsPerWeek": 4,
+    "days": [
+      {
+        "id": "upper-a",
+        "name": "Upper A",
+        "exercises": [
+          {
+            "id": "bench-press",
+            "name": "Bench Press",
+            "muscleGroups": [
+              "chest",
+              "shoulders",
+              "triceps"
+            ],
+            "targetSets": 3,
+            "repRange": {
+              "min": 5,
+              "max": 8
+            },
+            "loadIncrement": 5
+          },
+          {
+            "id": "barbell-row",
+            "name": "Barbell Row",
+            "muscleGroups": [
+              "back",
+              "biceps"
+            ],
+            "targetSets": 3,
+            "repRange": {
+              "min": 6,
+              "max": 10
+            },
+            "loadIncrement": 5
+          },
+          {
+            "id": "overhead-press",
+            "name": "Overhead Press",
+            "muscleGroups": [
+              "shoulders",
+              "triceps"
+            ],
+            "targetSets": 3,
+            "repRange": {
+              "min": 5,
+              "max": 8
+            },
+            "loadIncrement": 2.5
+          }
+        ]
+      },
+      {
+        "id": "lower-a",
+        "name": "Lower A",
+        "exercises": [
+          {
+            "id": "back-squat",
+            "name": "Back Squat",
+            "muscleGroups": [
+              "quads",
+              "glutes",
+              "core"
+            ],
+            "targetSets": 3,
+            "repRange": {
+              "min": 5,
+              "max": 8
+            },
+            "loadIncrement": 5
+          },
+          {
+            "id": "romanian-deadlift",
+            "name": "Romanian Deadlift",
+            "muscleGroups": [
+              "hamstrings",
+              "glutes",
+              "back"
+            ],
+            "targetSets": 3,
+            "repRange": {
+              "min": 6,
+              "max": 10
+            },
+            "loadIncrement": 5
+          },
+          {
+            "id": "calf-raise",
+            "name": "Standing Calf Raise",
+            "muscleGroups": [
+              "calves"
+            ],
+            "targetSets": 3,
+            "repRange": {
+              "min": 10,
+              "max": 15
+            },
+            "loadIncrement": 5
+          }
+        ]
+      }
+    ]
+  },
+  "history": [
+    {
+      "id": "session-1",
+      "dayId": "upper-a",
+      "performedAt": "2026-04-09T18:00:00-05:00",
+      "exercises": [
+        {
+          "exerciseId": "bench-press",
+          "sets": [
+            {
+              "reps": 8,
+              "load": 135,
+              "completed": true
+            },
+            {
+              "reps": 8,
+              "load": 135,
+              "completed": true
+            },
+            {
+              "reps": 8,
+              "load": 135,
+              "completed": true
+            }
+          ]
+        },
+        {
+          "exerciseId": "barbell-row",
+          "sets": [
+            {
+              "reps": 8,
+              "load": 115,
+              "completed": true
+            },
+            {
+              "reps": 8,
+              "load": 115,
+              "completed": true
+            },
+            {
+              "reps": 8,
+              "load": 115,
+              "completed": true
+            }
+          ]
+        },
+        {
+          "exerciseId": "overhead-press",
+          "sets": [
+            {
+              "reps": 5,
+              "load": 65,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 65,
+              "completed": true
+            },
+            {
+              "reps": 4,
+              "load": 65,
+              "completed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "session-2",
+      "dayId": "upper-a",
+      "performedAt": "2026-04-10T18:00:00-05:00",
+      "exercises": [
+        {
+          "exerciseId": "bench-press",
+          "sets": [
+            {
+              "reps": 5,
+              "load": 140,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 140,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 140,
+              "completed": true
+            }
+          ]
+        },
+        {
+          "exerciseId": "barbell-row",
+          "sets": [
+            {
+              "reps": 9,
+              "load": 115,
+              "completed": true
+            },
+            {
+              "reps": 9,
+              "load": 115,
+              "completed": true
+            },
+            {
+              "reps": 9,
+              "load": 115,
+              "completed": true
+            }
+          ]
+        },
+        {
+          "exerciseId": "overhead-press",
+          "sets": [
+            {
+              "reps": 5,
+              "load": 65,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 65,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 65,
+              "completed": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "session-3",
+      "dayId": "lower-a",
+      "performedAt": "2026-04-11T18:00:00-05:00",
+      "exercises": [
+        {
+          "exerciseId": "back-squat",
+          "sets": [
+            {
+              "reps": 5,
+              "load": 185,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 185,
+              "completed": true
+            },
+            {
+              "reps": 5,
+              "load": 185,
+              "completed": true
+            }
+          ]
+        },
+        {
+          "exerciseId": "romanian-deadlift",
+          "sets": [
+            {
+              "reps": 8,
+              "load": 155,
+              "completed": true
+            },
+            {
+              "reps": 8,
+              "load": 155,
+              "completed": true
+            },
+            {
+              "reps": 8,
+              "load": 155,
+              "completed": true
+            }
+          ]
+        },
+        {
+          "exerciseId": "calf-raise",
+          "sets": [
+            {
+              "reps": 12,
+              "load": 90,
+              "completed": true
+            },
+            {
+              "reps": 12,
+              "load": 90,
+              "completed": true
+            },
+            {
+              "reps": 12,
+              "load": 90,
+              "completed": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
